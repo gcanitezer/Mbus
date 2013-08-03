@@ -1310,14 +1310,6 @@ mbus_frame_data_xml_normalized(mbus_frame_data *data)
 mbus_handle *
 mbus_connect_serial(const char * device)
 {
-    mbus_serial_handle * serial_handle;
-    if ((serial_handle = mbus_serial_connect((char*)device)) == NULL)
-    {
-        MBUS_ERROR("%s: Failed to setup serial connection to M-bus gateway on %s.\n",
-                   __PRETTY_FUNCTION__, 
-                   device);
-        return NULL;
-    }
 
     mbus_handle * handle;
     if ((handle = (mbus_handle * ) malloc(sizeof(mbus_handle))) == NULL)
@@ -1325,8 +1317,7 @@ mbus_connect_serial(const char * device)
         MBUS_ERROR("%s: Failed to allocate handle.\n", __PRETTY_FUNCTION__);
         return NULL;
     }
-    handle->is_serial = 1;
-    handle->m_serial_handle = serial_handle;
+    handle->m_serial_handle = &Serial;
     return handle;
 }
 
@@ -1365,16 +1356,11 @@ mbus_disconnect(mbus_handle * handle)
         return 0;
     }
 
-    if (handle->is_serial)
-    {
-        mbus_serial_disconnect(handle->m_serial_handle);
-        handle->m_serial_handle = NULL;
-    }
-    else
-    {
-        //mbus_tcp_disconnect(handle->m_tcp_handle);
-        //handle->m_tcp_handle = NULL;
-    }
+
+     mbus_serial_disconnect(handle->m_serial_handle);
+     handle->m_serial_handle = NULL;
+
+
     free(handle);
     return 0;
 }
@@ -1390,15 +1376,9 @@ mbus_recv_frame(mbus_handle * handle, mbus_frame *frame)
         return 0;
     }
 
-    if (handle->is_serial)
-    {
-        result = mbus_serial_recv_frame(handle->m_serial_handle, frame);    
-    }
-    else
-    {
-        //result = mbus_tcp_recv_frame(handle->m_tcp_handle, frame);
-    }
-    
+
+    result = mbus_serial_recv_frame(handle->m_serial_handle, frame);
+
     if (frame != NULL)
     {
         /* set timestamp to receive time */
@@ -1418,15 +1398,10 @@ mbus_send_frame(mbus_handle * handle, mbus_frame *frame)
         return 0;
     }
 
-    if (handle->is_serial)
-    {
-        return mbus_serial_send_frame(handle->m_serial_handle, frame);
-    }
-    else
-    {
-        //return mbus_tcp_send_frame(handle->m_tcp_handle, frame);
-    }
-    return 0;
+
+    return mbus_serial_send_frame(handle->m_serial_handle, frame);
+
+
 }
 
 //------------------------------------------------------------------------------

@@ -21,21 +21,11 @@
 //#include <termios.h>
 #include "mbus.h"
 
-typedef struct _mbus_serial_handle {
-
-    char *device;
-
-    int fd;
-    //goker struct termios t;
- 
-} mbus_serial_handle;
-
-
-mbus_serial_handle *mbus_serial_connect(char *device);
-int                 mbus_serial_disconnect(mbus_serial_handle *handle);
-int                 mbus_serial_send_frame(mbus_serial_handle *handle, mbus_frame *frame);
-int                 mbus_serial_recv_frame(mbus_serial_handle *handle, mbus_frame *frame);
-int                 mbus_serial_set_baudrate(mbus_serial_handle *handle, int baudrate);
+HardwareSerial *mbus_serial_connect(char *device);
+int                 mbus_serial_disconnect(HardwareSerial *handle);
+int                 mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame);
+int                 mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame);
+int                 mbus_serial_set_baudrate(HardwareSerial *handle, int baudrate);
 #endif /* MBUS_SERIAL_H */
 
 

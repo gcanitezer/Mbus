@@ -486,17 +486,17 @@ typedef struct _mbus_data_secondary_address {
 //
 // Event callback functions
 //
-extern void (*_mbus_recv_event)(uint8_t src_type, const char *buff, size_t len);
-extern void (*_mbus_send_event)(uint8_t src_type, const char *buff, size_t len);
+extern void (*_mbus_recv_event)(uint8_t src_type, const uint8_t *buff, size_t len);
+extern void (*_mbus_send_event)(uint8_t src_type, const uint8_t *buff, size_t len);
 
-void mbus_dump_recv_event(uint8_t src_type, const char *buff, size_t len);
-void mbus_dump_send_event(uint8_t src_type, const char *buff, size_t len);
+void mbus_dump_recv_event(uint8_t src_type, const uint8_t *buff, size_t len);
+void mbus_dump_send_event(uint8_t src_type, const uint8_t *buff, size_t len);
 
 //
 // Event register functions
 //
-void mbus_register_recv_event(void (*event)(uint8_t src_type, const char *buff, size_t len));
-void mbus_register_send_event(void (*event)(uint8_t src_type, const char *buff, size_t len));
+void mbus_register_recv_event(void (*event)(uint8_t src_type, const uint8_t *buff, size_t len));
+void mbus_register_send_event(void (*event)(uint8_t src_type, const uint8_t *buff, size_t len));
 
 //
 // variable length records
@@ -582,7 +582,7 @@ void  mbus_error_str_set(char *message);
 void  mbus_error_reset();
 
 void  mbus_parse_set_debug(int debug);
-void  mbus_hex_dump(const char *label, const char *buff, size_t len);
+void  mbus_hex_dump(const char *label, const uint8_t *buff, size_t len);
 
 //
 // data encode/decode functions

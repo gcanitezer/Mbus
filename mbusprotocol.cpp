@@ -29,20 +29,20 @@ static mbus_slave_data slave_data[MBUS_MAX_PRIMARY_SLAVES];
 //
 // init event callback
 //
-void (*_mbus_recv_event)(uint8_t src_type, const char *buff, size_t len) = NULL;
-void (*_mbus_send_event)(uint8_t src_type, const char *buff, size_t len) = NULL;
+void (*_mbus_recv_event)(uint8_t src_type, const uint8_t *buff, size_t len) = NULL;
+void (*_mbus_send_event)(uint8_t src_type, const uint8_t *buff, size_t len) = NULL;
 
 //
 //  trace callbacks
 //
 void
-mbus_dump_recv_event(uint8_t src_type, const char *buff, size_t len)
+mbus_dump_recv_event(uint8_t src_type, const uint8_t *buff, size_t len)
 {
     mbus_hex_dump("RECV", buff, len);
 }
 
 void
-mbus_dump_send_event(uint8_t src_type, const char *buff, size_t len)
+mbus_dump_send_event(uint8_t src_type, const uint8_t *buff, size_t len)
 {
     mbus_hex_dump("SEND", buff, len);
 }
@@ -51,7 +51,7 @@ mbus_dump_send_event(uint8_t src_type, const char *buff, size_t len)
 /// Register a function for receive events.
 //------------------------------------------------------------------------------
 void
-mbus_register_recv_event(void (*event)(uint8_t src_type, const char *buff, size_t len))
+mbus_register_recv_event(void (*event)(uint8_t src_type, const uint8_t *buff, size_t len))
 {
     _mbus_recv_event = event;
 }
@@ -60,7 +60,7 @@ mbus_register_recv_event(void (*event)(uint8_t src_type, const char *buff, size_
 /// Register a function for send events.
 //------------------------------------------------------------------------------
 void
-mbus_register_send_event(void (*event)(uint8_t src_type, const char *buff, size_t len))
+mbus_register_send_event(void (*event)(uint8_t src_type, const uint8_t *buff, size_t len))
 {
     _mbus_send_event = event;
 }
@@ -3162,7 +3162,7 @@ mbus_data_fixed_print(mbus_data_fixed *data)
 }
 
 void
-mbus_hex_dump(const char *label, const char *buff, size_t len)
+mbus_hex_dump(const char *label, const uint8_t *buff, size_t len)
 {
     
     fprintf(stderr, "[%lu] %s (%03d):", millis(), label, len);

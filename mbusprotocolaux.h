@@ -74,11 +74,7 @@
  * Unified MBus handle type encapsulating either Serial or TCP gateway.
  */
 typedef struct _mbus_handle {
-    char is_serial;                           /**< _handle type (non zero for serial) */
-    union {
-       // mbus_tcp_handle    * m_tcp_handle;    /**< TCP gateway handle */
-        mbus_serial_handle * m_serial_handle; /**< Serial gateway handle */
-    };
+    HardwareSerial *m_serial_handle; /**< Serial gateway handle */
 } mbus_handle;
 
 

@@ -26,10 +26,10 @@
 //------------------------------------------------------------------------------
 /// Set up a serial connection handle.
 //------------------------------------------------------------------------------
-mbus_serial_handle *
+HardwareSerial *
 mbus_serial_connect(char *device)
 {
-    mbus_serial_handle *handle=1;
+    HardwareSerial *handle= &Serial;
     Serial.begin(2400);
 /*goker
 
@@ -80,7 +80,7 @@ mbus_serial_connect(char *device)
 // Set baud rate for serial connection
 //------------------------------------------------------------------------------
 int
-mbus_serial_set_baudrate(mbus_serial_handle *handle, int baudrate)
+mbus_serial_set_baudrate(HardwareSerial *handle, int baudrate)
 {
 	Serial.begin(baudrate);
 
@@ -142,7 +142,7 @@ mbus_serial_set_baudrate(mbus_serial_handle *handle, int baudrate)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_disconnect(mbus_serial_handle *handle)
+mbus_serial_disconnect(HardwareSerial *handle)
 {
 	Serial.end();
  /*goker   if (handle == NULL)
@@ -161,7 +161,7 @@ mbus_serial_disconnect(mbus_serial_handle *handle)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_send_frame(mbus_serial_handle *handle, mbus_frame *frame)
+mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame)
 {
     uint8_t buff[PACKET_BUFF_SIZE];
     int len, ret;
@@ -197,7 +197,7 @@ mbus_serial_send_frame(mbus_serial_handle *handle, mbus_frame *frame)
     }
     else
     {   
-        fprintf(stderr, "%s: Failed to write frame to socket (ret = %d: %s)\n", __PRETTY_FUNCTION__, ret, strerror(errno));
+        printf("%s: Failed to write frame to socket (ret = %d: )\n", __PRETTY_FUNCTION__, ret);
         return -1;
     }
     
@@ -213,7 +213,7 @@ mbus_serial_send_frame(mbus_serial_handle *handle, mbus_frame *frame)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_recv_frame(mbus_serial_handle *handle, mbus_frame *frame)
+mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame)
 {
     char buff[PACKET_BUFF_SIZE];
     int len, remaining, nread, timeouts;
