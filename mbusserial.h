@@ -20,12 +20,13 @@
 
 //#include <termios.h>
 #include "mbus.h"
+#include "SoftwareSerial.h"
 
-HardwareSerial *mbus_serial_connect(char *device);
-int                 mbus_serial_disconnect(HardwareSerial *handle);
-int                 mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame);
-int                 mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame);
-int                 mbus_serial_set_baudrate(HardwareSerial *handle, int baudrate);
+//SoftwareSerial *mbus_serial_connect(char *device);
+int                 mbus_serial_disconnect(SoftwareSerial *handle);
+int                 mbus_serial_send_frame(SoftwareSerial *handle, mbus_frame *frame);
+int                 mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame);
+int                 mbus_serial_set_baudrate(SoftwareSerial *handle, int baudrate);
 #endif /* MBUS_SERIAL_H */
 
 

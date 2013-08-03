@@ -1307,17 +1307,19 @@ mbus_frame_data_xml_normalized(mbus_frame_data *data)
     return NULL;
 }
 
+
 mbus_handle *
-mbus_connect_serial(const char * device)
+mbus_connect_serial(SoftwareSerial * device)
 {
 
     mbus_handle * handle;
+
     if ((handle = (mbus_handle * ) malloc(sizeof(mbus_handle))) == NULL)
     {
         MBUS_ERROR("%s: Failed to allocate handle.\n", __PRETTY_FUNCTION__);
         return NULL;
     }
-    handle->m_serial_handle = &Serial;
+    handle->m_serial_handle = device;
     return handle;
 }
 

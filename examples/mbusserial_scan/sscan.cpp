@@ -12,10 +12,14 @@
 #include "mbus_config.h"
 
 static int debug = 0;
+
+
+
+
 //------------------------------------------------------------------------------
 // Primary addressing scanning of mbus devices.
 //------------------------------------------------------------------------------
-int scanvalue()
+int scanvalue(uint8_t rxPin, uint8_t txPin)
 {
     mbus_handle *handle;
     char *device;
@@ -23,14 +27,14 @@ int scanvalue()
     int ret;
 
     debug= 1;
-    
+    SoftwareSerial mySerial(rxPin, txPin);
     if (debug)
     {
         mbus_register_send_event(&mbus_dump_send_event);
         mbus_register_recv_event(&mbus_dump_recv_event);
     }
     
-    if ((handle = mbus_connect_serial(device)) == NULL)
+    if ((handle = mbus_connect_serial(&mySerial)) == NULL)
     {
     	IF_SERIAL_DEBUG(printf_P(PSTR("Failed to setup connection to M-bus gateway\n")));
         return 1;

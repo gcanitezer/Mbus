@@ -74,7 +74,7 @@
  * Unified MBus handle type encapsulating either Serial or TCP gateway.
  */
 typedef struct _mbus_handle {
-    HardwareSerial *m_serial_handle; /**< Serial gateway handle */
+    SoftwareSerial *m_serial_handle; /**< Serial gateway handle */
 } mbus_handle;
 
 
@@ -142,7 +142,7 @@ void mbus_register_found_event(void (*event)(mbus_handle * handle, mbus_frame *f
  * 
  * @return Initialized "unified" handler when successful, NULL otherwise;
  */
-mbus_handle * mbus_connect_serial(const char * device);
+mbus_handle * mbus_connect_serial(SoftwareSerial * device);
 
 /** 
  * Connects to TCP gateway and initializes MBus handle

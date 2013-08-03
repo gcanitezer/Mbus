@@ -26,12 +26,13 @@
 //------------------------------------------------------------------------------
 /// Set up a serial connection handle.
 //------------------------------------------------------------------------------
-HardwareSerial *
+/*goker
+ SoftwareSerial *
 mbus_serial_connect(char *device)
 {
-    HardwareSerial *handle= &Serial;
+    SoftwareSerial *handle= &Serial;
     Serial.begin(2400);
-/*goker
+
 
 
     // Use blocking read and handle it by serial port VMIN/VTIME setting
@@ -72,17 +73,17 @@ mbus_serial_connect(char *device)
 #endif 
 
     tcsetattr(handle->fd, TCSANOW, &(handle->t));
-*/
+
     return handle;    
 }
-
+*/
 //------------------------------------------------------------------------------
 // Set baud rate for serial connection
 //------------------------------------------------------------------------------
 int
-mbus_serial_set_baudrate(HardwareSerial *handle, int baudrate)
+mbus_serial_set_baudrate(SoftwareSerial *handle, int baudrate)
 {
-	Serial.begin(baudrate);
+	handle->begin(baudrate);
 
   /*goker
     speed_t speed;
@@ -142,9 +143,9 @@ mbus_serial_set_baudrate(HardwareSerial *handle, int baudrate)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_disconnect(HardwareSerial *handle)
+mbus_serial_disconnect(SoftwareSerial *handle)
 {
-	Serial.end();
+	handle->end();
  /*goker   if (handle == NULL)
     {
         return -1;
@@ -161,7 +162,7 @@ mbus_serial_disconnect(HardwareSerial *handle)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame)
+mbus_serial_send_frame(SoftwareSerial *handle, mbus_frame *frame)
 {
     uint8_t buff[PACKET_BUFF_SIZE];
     int len, ret;
@@ -187,7 +188,7 @@ mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame)
     printf("\n");
 #endif
 
-    if ((ret = Serial.write(buff, len)) == len)
+    if ((ret = handle->write(buff, len)) == len)
     {
         //
         // call the send event function, if the callback function is registered
@@ -204,7 +205,7 @@ mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame)
     //
     // wait until complete frame has been transmitted
     //
-    Serial.flush();
+    handle->flush();
 
     return 0;
 }
@@ -213,14 +214,14 @@ mbus_serial_send_frame(HardwareSerial *handle, mbus_frame *frame)
 //
 //------------------------------------------------------------------------------
 int
-mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame)
+mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
 {
-    char buff[PACKET_BUFF_SIZE];
+    uint8_t buff[PACKET_BUFF_SIZE];
     int len, remaining, nread, timeouts;
- /*
+
     if (handle == NULL || frame == NULL)
     {
-        fprintf(stderr, "%s: Invalid parameter.\n", __PRETTY_FUNCTION__);
+        printf("%s: Invalid parameter.\n", __PRETTY_FUNCTION__);
         return -1;
     }
 
@@ -235,29 +236,12 @@ mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame)
 
     do {
         //printf("%s: Attempt to read %d bytes [len = %d]\n", __PRETTY_FUNCTION__, remaining, len);
+    	while(handle->available()>0 && len<PACKET_BUFF_SIZE)
+    	{
+    		buff[len] = handle->read();
+    		len++;
+    	}
 
-        if ((nread = read(handle->fd, &buff[len], remaining)) == -1)
-        {
-       //     fprintf(stderr, "%s: aborting recv frame (remaining = %d, len = %d, nread = %d)\n",
-         //          __PRETTY_FUNCTION__, remaining, len, nread);
-            return -1;
-        }
-
-//   printf("%s: Got %d byte [remaining %d, len %d]\n", __PRETTY_FUNCTION__, nread, remaining, len);
-   
-        if (nread == 0)
-        {
-            timeouts++;
-            
-            if (timeouts >= 3)
-            {
-                // abort to avoid endless loop
-                fprintf(stderr, "%s: Timeout\n", __PRETTY_FUNCTION__);
-                break;
-            }
-        }
-
-        len += nread;
 
     } while ((remaining = mbus_parse(frame, buff, len)) > 0);
 
@@ -285,7 +269,7 @@ mbus_serial_recv_frame(HardwareSerial *handle, mbus_frame *frame)
         fprintf(stderr, "%s: M-Bus layer failed to parse data.\n", __PRETTY_FUNCTION__);
         return -1;
     }
-  */
+
     return 0;
 }
 
