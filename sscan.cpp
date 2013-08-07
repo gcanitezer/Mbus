@@ -60,7 +60,7 @@ int scanvalue(uint8_t rxPin, uint8_t txPin)
         	IF_SERIAL_DEBUG(printf_P(PSTR("Scan failed. Could not send ping frame\n")));
             return 1;
         } 
-/*
+
         ret = mbus_recv_frame(handle, &reply);
 
         if (ret == -1)
@@ -97,7 +97,7 @@ int scanvalue(uint8_t rxPin, uint8_t txPin)
                 
             IF_SERIAL_DEBUG(printf_P(PSTR("Found a M-Bus device at address %d\n"), address));
         }
-*/
+
     }
 
     mbus_disconnect(handle);
