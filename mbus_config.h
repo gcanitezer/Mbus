@@ -10,6 +10,12 @@
 #ifndef __MBUS_CONFIG_H__
 #define __MBUS_CONFIG_H__
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+
 #if ARDUINO < 100
 #include <WProgram.h>
 #else
@@ -26,6 +32,8 @@
 extern HardwareSPI SPI;
 #define _BV(x) (1<<(x))
 #endif
+
+#define SERIAL_DEBUG
 
 //#undef SERIAL_DEBUG
 #ifdef SERIAL_DEBUG

@@ -19,7 +19,7 @@
 #define MBUS_SERIAL_H
 
 //#include <termios.h>
-#include "mbus.h"
+#include "mbusprotocol.h"
 #include "SoftwareSerial.h"
 
 //SoftwareSerial *mbus_serial_connect(char *device);

@@ -36,7 +36,7 @@
 #include "mbusprotocol.h"
 #include "mbusprotocolaux.h"
 #include "mbusserial.h"
-
+#include "mbus_config.h"
 //
 //
 //

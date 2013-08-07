@@ -167,6 +167,8 @@ mbus_serial_send_frame(SoftwareSerial *handle, mbus_frame *frame)
     uint8_t buff[PACKET_BUFF_SIZE];
     int len, ret;
 
+    IF_SERIAL_DEBUG(printf_P(PSTR("%s: Entered \n"), "mbus_serial_send_frame"));
+
     if (handle == NULL || frame == NULL)
     {
         return -1;
@@ -174,19 +176,20 @@ mbus_serial_send_frame(SoftwareSerial *handle, mbus_frame *frame)
 
     if ((len = mbus_frame_pack(frame, buff, sizeof(buff))) == -1)
     {
-        fprintf(stderr, "%s: mbus_frame_pack failed\n", __PRETTY_FUNCTION__);
+    	IF_SERIAL_DEBUG(printf_P(PSTR("%s: mbus_frame_pack failed\n"), "mbus_serial_send_frame"));
         return -1;
     }
-    
-#ifdef MBUS_SERIAL_DEBUG
+
+//#ifdef MBUS_SERIAL_DEBUG
     // if debug, dump in HEX form to stdout what we write to the serial port
-    printf("%s: Dumping M-Bus frame [%d bytes]: ", __PRETTY_FUNCTION__, len);
-    for (i = 0; i < len; i++)
+    printf_P(PSTR("%s: Dumping M-Bus frame [%d bytes]: "), __PRETTY_FUNCTION__, len);
+    for (int i = 0; i < len; i++)
     {
-       printf("%.2X ", buff[i]);
+       printf_P(PSTR("%.2X "), buff[i]);
     }
-    printf("\n");
-#endif
+    printf_P(PSTR("\n"));
+
+//#endif
 
     if ((ret = handle->write(buff, len)) == len)
     {
@@ -198,7 +201,7 @@ mbus_serial_send_frame(SoftwareSerial *handle, mbus_frame *frame)
     }
     else
     {   
-        printf("%s: Failed to write frame to socket (ret = %d: )\n", __PRETTY_FUNCTION__, ret);
+    	IF_SERIAL_DEBUG(printf_P(PSTR("%s: Failed to write frame to socket (ret = %d: )\n"), "mbus_serial_send_frame", ret));
         return -1;
     }
     
@@ -221,7 +224,7 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
 
     if (handle == NULL || frame == NULL)
     {
-        printf("%s: Invalid parameter.\n", __PRETTY_FUNCTION__);
+        printf_P(PSTR("%s: Invalid parameter.\n"), __PRETTY_FUNCTION__);
         return -1;
     }
 
@@ -235,7 +238,7 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
     timeouts = 0;
 
     do {
-        //printf("%s: Attempt to read %d bytes [len = %d]\n", __PRETTY_FUNCTION__, remaining, len);
+        //printf_P(PSTR("%s: Attempt to read %d bytes [len = %d]\n"), __PRETTY_FUNCTION__, remaining, len);
     	while(handle->available()>0 && len<PACKET_BUFF_SIZE)
     	{
     		buff[len] = handle->read();
@@ -260,13 +263,13 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
     if (remaining != 0)
     {
         // Would be OK when e.g. scanning the bus, otherwise it is a failure.
-        // printf("%s: M-Bus layer failed to receive complete data.\n", __PRETTY_FUNCTION__);
+        // printf_P(PSTR("%s: M-Bus layer failed to receive complete data.\n"), __PRETTY_FUNCTION__);
         return -2;
     }
 
     if (len == -1)
     {
-        fprintf(stderr, "%s: M-Bus layer failed to parse data.\n", __PRETTY_FUNCTION__);
+        printf_P(PSTR("%s: M-Bus layer failed to parse data.\n"), __PRETTY_FUNCTION__);
         return -1;
     }
 
