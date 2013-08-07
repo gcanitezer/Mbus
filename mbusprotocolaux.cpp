@@ -1376,6 +1376,7 @@ int
 mbus_recv_frame(mbus_handle * handle, mbus_frame *frame)
 {
     int result = 0;
+    MBUS_ERROR1("%s: mbus_recv_frame Entered \n", "mbus_recv_frame");
 
     if (handle == NULL)
     {

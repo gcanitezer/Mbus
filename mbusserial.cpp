@@ -20,8 +20,8 @@
 
 #include "mbus.h"
 #include "mbusserial.h"
-
-#define PACKET_BUFF_SIZE 2048
+//2048
+#define PACKET_BUFF_SIZE 256
 
 //------------------------------------------------------------------------------
 /// Set up a serial connection handle.
@@ -222,13 +222,15 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
     uint8_t buff[PACKET_BUFF_SIZE];
     int len, remaining, nread, timeouts;
 
+    printf_P(PSTR("%s: Entered \n"), __PRETTY_FUNCTION__);
+
     if (handle == NULL || frame == NULL)
     {
         printf_P(PSTR("%s: Invalid parameter.\n"), __PRETTY_FUNCTION__);
         return -1;
     }
 
-    memset((void *)buff, 0, sizeof(buff));
+    memset(buff, 0, sizeof(buff));
 
     //
     // read data until a packet is received
@@ -236,9 +238,9 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
     remaining = 1; // start by reading 1 byte
     len = 0;
     timeouts = 0;
-
+    printf_P(PSTR("%s: Entered3 \n"), __PRETTY_FUNCTION__);
     do {
-        //printf_P(PSTR("%s: Attempt to read %d bytes [len = %d]\n"), __PRETTY_FUNCTION__, remaining, len);
+        printf_P(PSTR("%s: Attempt to read %d bytes [len = %d]\n"), __PRETTY_FUNCTION__, remaining, len);
     	while(handle->available()>0 && len<PACKET_BUFF_SIZE)
     	{
     		buff[len] = handle->read();
@@ -263,7 +265,7 @@ mbus_serial_recv_frame(SoftwareSerial *handle, mbus_frame *frame)
     if (remaining != 0)
     {
         // Would be OK when e.g. scanning the bus, otherwise it is a failure.
-        // printf_P(PSTR("%s: M-Bus layer failed to receive complete data.\n"), __PRETTY_FUNCTION__);
+        printf_P(PSTR("%s: M-Bus layer failed to receive complete data.\n"), __PRETTY_FUNCTION__);
         return -2;
     }
 
