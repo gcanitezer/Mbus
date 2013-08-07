@@ -1376,7 +1376,7 @@ int
 mbus_recv_frame(mbus_handle * handle, mbus_frame *frame)
 {
     int result = 0;
-/*
+
     if (handle == NULL)
     {
         MBUS_ERROR1("%s: Invalid M-Bus handle for receive.\n", "mbus_recv_frame");
@@ -1392,7 +1392,7 @@ mbus_recv_frame(mbus_handle * handle, mbus_frame *frame)
        // time(&(frame->timestamp));
     	frame->timestamp = millis();
     }
-    */
+
     return result;
 }
 

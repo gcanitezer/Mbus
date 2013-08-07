@@ -19,7 +19,7 @@ int scanvalue(uint8_t rxPin, uint8_t txPin)
 {
     mbus_handle *handle;
     char *device;
-    int address, baudrate = 9600;
+    int address, baudrate = 2400;
     int ret;
 
     IF_SERIAL_DEBUG(printf_P(PSTR("Entered scanvalue \n")));
